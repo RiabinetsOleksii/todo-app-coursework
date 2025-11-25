@@ -1,13 +1,18 @@
 import React from 'react';
 import TodoApp from './components/TodoApp';
+import { useTheme } from '@mui/material/styles';
+import { Box, CssBaseline } from '@mui/material';
 
 function App() {
-  return (
-    <div className="App" style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
-      <h1 style={{ color: '#007bff', marginTop: 30 }}>📝 To-Do List</h1>
-      <TodoApp />
-    </div>
-  );
+    const theme = useTheme();
+
+    return (
+        // Застосовуємо загальний фон до всього body, використовуючи theme.palette.background.default
+        <Box sx={{ minHeight: '100vh', backgroundColor: theme.palette.background.default }}>
+            <CssBaseline />
+            <TodoApp />
+        </Box>
+    );
 }
 
 export default App;

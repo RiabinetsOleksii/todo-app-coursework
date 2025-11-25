@@ -1,8 +1,8 @@
 package com.example.todoapp.controller;
 
-import com.example.todoapp.model.Todo;
+import com.example.todoapp.dto.TodoRequest;
+import com.example.todoapp.dto.TodoResponse;
 import com.example.todoapp.service.TodoService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,31 +19,28 @@ public class TodoController {
     }
 
     @GetMapping
-    public List<Todo> getAllTodos() {
+    public List<TodoResponse> getAll() {
         return todoService.getAllTodos();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Todo> getTodoById(@PathVariable Long id) {
-        return todoService.getTodoById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
     @PostMapping
-    public Todo createTodo(@RequestBody Todo todo) {
-        return todoService.createTodo(todo);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Todo> updateTodo(@PathVariable Long id, @RequestBody Todo newTodo) {
-        Todo updated = todoService.updateTodo(id, newTodo);
-        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
+    public TodoResponse create(@RequestBody TodoRequest request) {
+        return todoService.createTodo(request);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTodo(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         todoService.deleteTodo(id);
-        return ResponseEntity.noContent().build();
+    }
+
+    // ENDPOINT: Оновлення всієї задачі (для In-line Editing)
+    @PutMapping("/{id}")
+    public TodoResponse update(@PathVariable Long id, @RequestBody TodoRequest request) {
+        return todoService.updateTodo(id, request);
+    }
+
+    @PutMapping("/{id}/toggle")
+    public TodoResponse toggle(@PathVariable Long id) {
+        return todoService.toggleCompleted(id);
     }
 }
